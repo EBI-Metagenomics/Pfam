@@ -13,7 +13,7 @@ our @PERL5LIB;
 our @PATH;
 my @LIBS = qw(PfamWeb Rfam Rfam/Schemata PfamSchemata PfamBackend PfamScripts Bio-Easel WikiApp PfamTests PfamConfig PfamLib PfamBase PfamBase/lib);
 
-my ($pfamConfigFile, $port) = (@ARGV);
+my ($pfamConfigFile, $port, $debug) = (@ARGV);
 my $pfamExe = "PfamWeb/script/pfamweb_server.pl";
 
 unless (defined $port) {
@@ -61,4 +61,8 @@ unless (-e $linkDir && -l $linkDir) {
     die ("Failed to create link $linkDir") unless ($linkCreated);
 }
 
-system("perl $pfamExe -p $port --follow_symlink");
+if (defined $debug) {
+  system("perl -d $pfamExe -p $port --follow_symlink");
+} else {
+  system("perl $pfamExe -p $port --follow_symlink");
+}
