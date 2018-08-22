@@ -1,7 +1,7 @@
 
 # Scraper.pm
 # jt6 20100720 WTSI
-# 
+#
 # $Id$
 
 =head1 NAME
@@ -22,9 +22,9 @@ package Bio::Pfam::Wiki::Scraper;
 
 =head1 DESCRIPTION
 
-A simple Moose class for scraping wikipedia content. Given an article title, 
+A simple Moose class for scraping wikipedia content. Given an article title,
 the C<scrape> method retrieves the article content and returns it. The content
-is "sanitised" using L<HTML::Scrubber> before being returned. In particular, 
+is "sanitised" using L<HTML::Scrubber> before being returned. In particular,
 scripts and anything looking like a scriptable attribute is stripped.
 
 =cut
@@ -48,7 +48,7 @@ our $VERSION = '0.1';
 #     log4perl.appender.Screen.layout   = Log::Log4perl::Layout::PatternLayout
 #     log4perl.appender.Screen.layout.ConversionPattern = %M:%L %p: %m%n
 #   );
-# 
+#
 #   Log::Log4perl->init_once( \$logger_conf );
 # }
 
@@ -56,7 +56,7 @@ has 'logger' => (
   is      => 'ro',
   isa     => 'Log::Log4perl::Logger',
   lazy    => 1,
-  default => sub { 
+  default => sub {
     my $this = shift;
     return Log::Log4perl->get_logger( ref $this );
   }
@@ -70,7 +70,7 @@ has 'logger' => (
 
 =head2 wiki_root
 
-Sets/gets the root of the URL for wiki pages. Defaults to 
+Sets/gets the root of the URL for wiki pages. Defaults to
 C<http://en.wikipedia.org/w/index.php?action=render&amp;title=>.
 
 =cut
@@ -78,7 +78,7 @@ C<http://en.wikipedia.org/w/index.php?action=render&amp;title=>.
 has 'wiki_root' => (
   is => 'rw',
   isa => 'Str',
-  default => 'http://en.wikipedia.org/w/index.php?action=render&title='
+  default => 'https://en.wikipedia.org/w/index.php?action=render&title='
 );
 
 #---------------------------------------
@@ -150,7 +150,7 @@ has 'ua' => (
   isa     => 'LWP::UserAgent',
   lazy    => 1,
   default => sub {
-    my $ua = LWP::UserAgent->new;
+    my $ua = LWP::UserAgent->new(ssl_opts => { verify_hostname => 1 });
     $ua->env_proxy;
     $ua->agent( 'Mozilla/5.001 (windows; U; NT4.0; en-us) Gecko/25250101' );
     return $ua;
@@ -226,7 +226,7 @@ Rob Finn, C<rdf@sanger.ac.uk>
 
 Copyright (c) 2007: Genome Research Ltd.
 
-Authors: Rob Finn (rdf@sanger.ac.uk), 
+Authors: Rob Finn (rdf@sanger.ac.uk),
          Paul Gardner, (pg5@sanger.ac.uk),
          John Tate (jt6@sanger.ac.uk)
 
@@ -246,4 +246,3 @@ this program. If not, see <http://www.gnu.org/licenses/>.
 =cut
 
 1;
-
